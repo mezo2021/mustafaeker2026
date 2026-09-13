@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.A للتدريب المهني - اختبار ICDL الحكومي</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+  :root {
+    --primary: #1a3a5c; --primary-light: #2c5aa0; --accent: #d4af37;
+    --success: #28a745; --danger: #dc3545; --warning: #ffc107;
+    --bg: #f0f2f5; --card: #ffffff; --text: #2c3e50;
+    --ms-blue: #0078d4;
+  }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ===== LOGIN ===== */
+  #loginScreen { position: fixed; inset: 0; background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 50%, #1a3a5c 100%); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+  .login-box { background: var(--card); padding: 50px 40px; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.4); text-align: center; width: 90%; max-width: 450px; animation: fadeIn 0.6s ease; }
+  .login-box .logo { width: 90px; height: 90px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; color: #fff; font-size: 32px; font-weight: bold; box-shadow: 0 8px 25px rgba(26,58,92,0.4); }
+  .login-box h1 { color: var(--primary); font-size: 22px; margin-bottom: 8px; }
+  .login-box h2 { color: var(--accent); font-size: 15px; margin-bottom: 25px; font-weight: 600; }
+  .login-box .designer-credit { font-size: 12px; color: #888; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+  .password-input { width: 100%; padding: 15px 20px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 18px; text-align: center; letter-spacing: 3px; transition: all 0.3s; outline: none; direction: ltr; }
+  .password-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 4px rgba(44,90,160,0.1); }
+  .login-btn { width: 100%; padding: 15px; margin-top: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,58,92,0.4); }
+  .error-msg { color: var(--danger); font-size: 14px; margin-top: 12px; min-height: 20px; }
+
+  /* ===== HEADER ===== */
+  header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100; }
+  header .brand { display: flex; align-items: center; gap: 15px; }
+  header .brand .logo-sm { width: 45px; height: 45px; border-radius: 12px; background: var(--accent); color: var(--primary); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px; }
+  header .brand-text h1 { font-size: 18px; }
+  header .brand-text p { font-size: 11px; opacity: 0.8; color: var(--accent); }
+  header .designer-tag { font-size: 11px; opacity: 0.85; background: rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 20px; }
+
+  /* ===== MAIN ===== */
+  main { flex: 1; padding: 30px; max-width: 1200px; margin: 0 auto; width: 100%; }
+  .welcome-section { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 20px; padding: 35px; color: #fff; margin-bottom: 30px; position: relative; overflow: hidden; }
+  .welcome-section::after { content: '💻'; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: 0.08; }
+  .welcome-section h2 { font-size: 26px; margin-bottom: 10px; }
+  .welcome-section p { opacity: 0.9; font-size: 15px; line-height: 1.7; }
+  .welcome-section .credit-line { margin-top: 15px; font-size: 13px; background: rgba(255,255,255,0.12); display: inline-block; padding: 6px 16px; border-radius: 20px; color: var(--accent); }
+  .exams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
+  .exam-card { background: var(--card); border-radius: 18px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); border-top: 5px solid var(--primary-light); transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+  .exam-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.13); }
+  .exam-card .icon { width: 60px; height: 60px; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 28px; margin-bottom: 18px; background: linear-gradient(135deg, #e8f0fe, #d0e0f0); }
+  .exam-card h3 { color: var(--primary); font-size: 17px; margin-bottom: 8px; line-height: 1.5; }
+  .exam-card .meta { font-size: 13px; color: #777; margin-bottom: 18px; line-height: 1.8; }
+  .exam-card .meta span { display: inline-block; background: #f5f7fa; padding: 3px 10px; border-radius: 10px; margin-left: 6px; margin-bottom: 4px; }
+  .start-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+  .exam-card .card-credit { font-size: 10px; color: #bbb; text-align: center; margin-top: 12px; }
+
+  /* ===== EXAM ===== */
+  #examScreen { display: none; }
+  .exam-header { background: var(--card); border-radius: 15px; padding: 22px 28px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+  .exam-header h2 { color: var(--primary); font-size: 18px; }
+  .exam-header .exam-credit { font-size: 11px; color: #aaa; }
+  .timer-box { background: linear-gradient(135deg, #fff3cd, #ffe69c); padding: 10px 22px; border-radius: 12px; font-weight: bold; color: #856404; font-size: 18px; }
+  .timer-box.danger { background: linear-gradient(135deg, #f8d7da, #f5c6cb); color: #721c24; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+  .progress-bar-container { background: #e9ecef; border-radius: 10px; height: 10px; margin-bottom: 25px; overflow: hidden; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.4s ease; border-radius: 10px; }
+
+  .question-card { background: var(--card); border-radius: 18px; padding: 30px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); animation: slideIn 0.35s ease; }
+  .question-number { display: inline-block; background: var(--primary); color: #fff; width: 38px; height: 38px; border-radius: 50%; text-align: center; line-height: 38px; font-weight: bold; margin-left: 12px; }
+  .question-text { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 22px; line-height: 1.8; }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border: 2px solid #e8ecf0; border-radius: 12px; cursor: pointer; transition: all 0.25s; background: #fafbfc; }
+  .option:hover { border-color: var(--primary-light); background: #f0f6ff; }
+  .option.selected { border-color: var(--primary-light); background: #e8f0fe; }
+  .option .opt-letter { width: 32px; height: 32px; border-radius: 50%; background: #e8ecf0; color: var(--text); display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; flex-shrink: 0; }
+  .option.selected .opt-letter { background: var(--primary-light); color: #fff; }
+  .option .opt-text { font-size: 15px; line-height: 1.6; }
+
+  .nav-buttons { display: flex; justify-content: space-between; gap: 15px; margin-top: 10px; flex-wrap: wrap; }
+  .btn { padding: 14px 35px; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,58,92,0.35); }
+  .btn-secondary { background: #e8ecf0; color: var(--text); }
+  .btn-secondary:hover { background: #d5dce3; }
+  .btn-success { background: linear-gradient(135deg, #28a745, #34ce57); color: #fff; }
+  .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(40,167,69,0.35); }
+  .btn-gold { background: linear-gradient(135deg, #d4af37, #f0d97a); color: #1a3a5c; }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212,175,55,0.4); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 6px; margin: 15px 0; padding: 15px; background: var(--card); border-radius: 12px; }
+  .nav-grid button { padding: 8px; border: 2px solid #e0e0e0; background: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; transition: all 0.2s; }
+  .nav-grid button.answered { background: #d4edda; border-color: #28a745; color: #155724; }
+  .nav-grid button.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  /* ===== RESULT ===== */
+  #resultScreen { display: none; }
+  .result-card { background: var(--card); border-radius: 20px; padding: 45px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.1); margin-bottom: 25px; }
+  .result-circle { width: 160px; height: 160px; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 25px; border: 8px solid; animation: scaleIn 0.6s ease; }
+  .result-circle.pass { border-color: var(--success); background: #e6f9ec; }
+  .result-circle.fail { border-color: var(--danger); background: #fdeaea; }
+  .result-circle .score { font-size: 48px; font-weight: bold; }
+  .result-circle.pass .score { color: var(--success); }
+  .result-circle.fail .score { color: var(--danger); }
+  .result-circle .out-of { font-size: 15px; color: #888; }
+  .result-title { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+  .result-title.pass { color: var(--success); }
+  .result-title.fail { color: var(--danger); }
+  .result-message { font-size: 15px; color: #666; margin-bottom: 25px; line-height: 1.8; }
+
+  .sections-summary { background: var(--card); border-radius: 18px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 25px; }
+  .sections-summary h3 { color: var(--primary); margin-bottom: 20px; font-size: 18px; }
+  .section-row { padding: 14px 18px; border-radius: 12px; margin-bottom: 10px; background: #f8f9fb; }
+  .section-row .name { font-weight: 600; font-size: 14px; }
+  .section-row .score-badge { padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+  .score-badge.pass { background: #d4edda; color: #155724; }
+  .score-badge.fail { background: #f8d7da; color: #721c24; }
+  .section-bar { height: 6px; background: #e9ecef; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+  .section-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+
+  .review-section { background: var(--card); border-radius: 18px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .review-section h3 { color: var(--primary); margin-bottom: 20px; font-size: 18px; }
+  .review-item { border: 1px solid #eee; border-radius: 14px; padding: 22px; margin-bottom: 16px; background: #fafbfc; }
+  .review-item .q-text { font-weight: 600; margin-bottom: 14px; line-height: 1.7; font-size: 15px; }
+  .review-answer { padding: 11px 16px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; line-height: 1.6; }
+  .review-answer.your-wrong { background: #fdeaea; border-right: 4px solid var(--danger); }
+  .review-answer.correct-ans { background: #e6f9ec; border-right: 4px solid var(--success); }
+  .review-answer .label { font-weight: bold; font-size: 12px; display: block; margin-bottom: 3px; }
+  .review-answer.your-wrong .label { color: var(--danger); }
+  .review-answer.correct-ans .label { color: var(--success); }
+
+  .result-actions { display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 10000; padding: 20px; }
+  .modal-overlay.show { display: flex; }
+  .modal-box { background: #fff; border-radius: 20px; padding: 35px; max-width: 500px; width: 100%; text-align: center; animation: fadeIn 0.3s ease; }
+  .modal-box h3 { color: var(--primary); margin-bottom: 15px; font-size: 20px; }
+  .modal-box p { color: #666; font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+  .modal-box input { width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; text-align: center; margin-bottom: 15px; }
+  .modal-box input:focus { outline: none; border-color: var(--primary); }
+  .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+
+  /* ===== ROYAL MICROSOFT CERTIFICATE ===== */
+  #certificateArea { display: none; margin-top: 30px; }
+  .certificate-frame {
+    background: #fffdf9;
+    border: 14px double #d4af37;
+    border-radius: 24px;
+    padding: 60px 45px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  .certificate-frame::before {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 2px solid #1a3a5c;
+    border-radius: 16px;
+    pointer-events: none;
+  }
+  .cert-ms-header { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; }
+  .ms-logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 32px; height: 32px; }
+  .ms-logo-grid div:nth-child(1) { background: #f25022; }
+  .ms-logo-grid div:nth-child(2) { background: #7fba00; }
+  .ms-logo-grid div:nth-child(3) { background: #00a4ef; }
+  .ms-logo-grid div:nth-child(4) { background: #ffb900; }
+  .ms-title-brand { font-size: 22px; font-weight: 800; color: #2f2f2f; letter-spacing: 1px; font-family: 'Segoe UI', sans-serif; }
+  
+  .certificate-frame .cert-ornament { font-size: 45px; color: #d4af37; margin-bottom: 5px; }
+  .certificate-frame h1 { color: #1a3a5c; font-size: 34px; margin-bottom: 5px; letter-spacing: 2px; font-weight: 800; }
+  .certificate-frame .cert-institute { color: #d4af37; font-size: 19px; font-weight: bold; margin-bottom: 25px; letter-spacing: 0.5px; }
+  .certificate-frame .cert-subtitle { color: #555; font-size: 16px; margin-bottom: 25px; font-weight: 600; }
+  .certificate-frame .cert-name-line { font-size: 16px; color: #444; margin-bottom: 10px; }
+  .certificate-frame .cert-name { display: inline-block; padding: 8px 50px; border-bottom: 3px solid #1a3a5c; font-size: 28px; font-weight: bold; color: #1a3a5c; margin: 10px 0 25px; min-width: 320px; }
+  .certificate-frame .cert-body { font-size: 16px; color: #333; line-height: 2; margin-bottom: 25px; }
+  .certificate-frame .cert-exam { color: #1a3a5c; font-weight: bold; font-size: 18px; }
+  .certificate-frame .cert-grade { display: inline-block; background: linear-gradient(135deg, #d4af37, #f0d97a); color: #1a3a5c; padding: 12px 35px; border-radius: 30px; font-weight: bold; font-size: 19px; margin: 20px 0; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+  .certificate-frame .cert-footer { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 20px; border-top: 2px dashed #d4af37; font-size: 14px; color: #555; }
+  .certificate-frame .cert-seal { display: inline-block; border: 4px double #d4af37; border-radius: 50%; padding: 18px; color: #1a3a5c; font-weight: bold; font-size: 12px; position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); background: #fffdf9; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+  .certificate-frame .cert-seal .seal-text { text-align: center; line-height: 1.4; color: #d4af37; }
+  .certificate-frame .cert-ref { position: absolute; top: 25px; left: 30px; font-size: 11px; color: #888; font-family: monospace; }
+
+  /* ===== ANSWER KEY ===== */
+  #answerKeyArea { display: none; margin-top: 30px; }
+  .answer-key-header { text-align: center; padding: 30px; border-bottom: 3px double #1a3a5c; margin-bottom: 25px; }
+  .answer-key-header h1 { color: #1a3a5c; font-size: 24px; margin-bottom: 8px; }
+  .answer-key-header .ak-sub { color: #666; font-size: 14px; }
+  .answer-key-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  .answer-key-table th, .answer-key-table td { border: 1px solid #ddd; padding: 12px; text-align: right; font-size: 13px; }
+  .answer-key-table th { background: #1a3a5c; color: #fff; font-weight: bold; }
+  .answer-key-table tr:nth-child(even) { background: #f8f9fb; }
+  .answer-key-table .q-num { font-weight: bold; color: #1a3a5c; text-align: center; width: 50px; }
+  .answer-key-table .answer-cell { background: #e6f9ec; font-weight: bold; color: #155724; text-align: center; width: 80px; }
+
+  footer { background: var(--primary); color: #fff; padding: 25px; text-align: center; margin-top: auto; }
+  footer p { font-size: 13px; opacity: 0.85; margin-bottom: 5px; }
+  footer .accent { color: var(--accent); font-weight: bold; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes scaleIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  @media (max-width: 600px) {
+    header { padding: 14px 16px; }
+    header .designer-tag { display: none; }
+    main { padding: 16px; }
+    .question-card { padding: 20px; }
+    .result-card { padding: 28px; }
+    .exam-header { flex-direction: column; align-items: flex-start; }
+    .certificate-frame { padding: 30px 20px; }
+    .certificate-frame h1 { font-size: 22px; }
+    .certificate-frame .cert-name { font-size: 20px; min-width: auto; }
+  }
+
+  @media print {
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 0; margin: 0; }
+    header, footer, .modal-overlay { display: none !important; }
+    .no-print { display: none !important; }
+    .certificate-frame { box-shadow: none; page-break-inside: avoid; }
+    .answer-key-table { page-break-inside: auto; }
+    .answer-key-table tr { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">M.A</div>
+    <h1>منصة M.A للتدريب المهني</h1>
+    <h2>اختبار ICDL الحكومي المتقدم</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:20px;">أدخل كلمة المرور للوصول إلى الاختبار</p>
+    <input type="password" id="passwordInput" class="password-input" placeholder="••••••••" maxlength="20">
+    <button class="login-btn" onclick="checkPassword()">دخول</button>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="designer-credit">
+      إعداد وتصميم: <strong style="color:var(--primary);">أ. مصطفى اكر</strong><br>
+      <span style="font-size:10px;">© جميع حقوق الابتكار والنشر محفوظة</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="mainHeader" style="display:none;">
+  <div class="brand">
+    <div class="logo-sm">M.A</div>
+    <div class="brand-text">
+      <h1>M.A للتدريب المهني</h1>
+      <p>إعداد وتصميم: أ. مصطفى اكر</p>
+    </div>
+  </div>
+  <div class="designer-tag">© حقوق النشر محفوظة</div>
+</header>
+
+<main id="mainContent" style="display:none;">
+
+  <div id="homeScreen">
+    <div class="welcome-section">
+      <h2>اختبار ICDL الحكومي المتقدم</h2>
+      <p>اختبار شامل في مهارات الحاسوب (ICDL) — 100 سؤال يتم اختيارها عشوائياً من بنك أسئلة يضم 200 سؤال. الإجابات موزعة عشوائياً على الخيارات الثلاثة.</p>
+      <div class="credit-line">إعداد وتصميم: أ. مصطفى اكر — جميع حقوق الابتكار والنشر محفوظة</div>
+    </div>
+    <div class="exams-grid" id="examsGrid"></div>
+  </div>
+
+  <div id="examScreen">
+    <div class="exam-header">
+      <div>
+        <h2 id="examTitle"></h2>
+        <div class="exam-credit">إعداد وتصميم: أ. مصطفى اكر</div>
+      </div>
+      <div class="timer-box" id="timerBox">⏱️ <span id="timerDisplay">00:00</span></div>
+    </div>
+    <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div id="navGrid" class="nav-grid no-print"></div>
+    <div id="questionsContainer"></div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goHome()">← العودة للرئيسية</button>
+      <button class="btn btn-success" id="submitBtn" onclick="submitExam()">إنهاء وعرض النتيجة</button>
+    </div>
+  </div>
+
+  <div id="resultScreen">
+    <div class="result-card">
+      <div class="result-circle" id="resultCircle">
+        <div class="score" id="resultScore">0</div>
+        <div class="out-of">من 100</div>
+      </div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-message" id="resultMessage"></div>
+      <div class="designer-credit-result" style="font-size:13px;color:#aaa;margin-top:20px;padding-top:18px;border-top:1px dashed #ddd;">
+        إعداد وتصميم: <strong>أ. مصطفى اكر</strong> — جميع حقوق الابتكار والنشر محفوظة
+      </div>
+    </div>
+
+    <div class="sections-summary">
+      <h3>📊 النتيجة حسب الأقسام</h3>
+      <div id="sectionsSummary"></div>
+    </div>
+
+    <div class="review-section" id="reviewSection">
+      <h3>📝 مراجعة الأسئلة الخاطئة</h3>
+      <div id="reviewContainer"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-gold" id="certBtn" onclick="requestCertificate()">🎓 الحصول على شهادة التدريب</button>
+      <button class="btn btn-primary" id="keyBtn" onclick="requestAnswerKey()">📋 طباعة سلم التصحيح</button>
+      <button class="btn btn-secondary" onclick="goHome()">🏠 الرئيسية</button>
+      <button class="btn btn-secondary" onclick="retryExam()">🔄 إعادة الاختبار</button>
+    </div>
+  </div>
+
+</main>
+
+<footer id="mainFooter" style="display:none;">
+  <p><span class="accent">M.A</span> للتدريب المهني — منصة الاختبارات المؤتمتة</p>
+  <p>إعداد وتصميم: <span class="accent">أ. مصطفى اكر</span> | جميع حقوق الابتكار والنشر محفوظة © 2026</p>
+</footer>
+
+<div class="modal-overlay" id="codeModal">
+  <div class="modal-box">
+    <h3>🔐 رمز التفعيل المطلوب</h3>
+    <p>هذه الخدمة مدفوعة. أدخل الرمز السري للمتابعة.</p>
+    <input type="password" id="codeInput" placeholder="أدخل الرمز السري" maxlength="10" inputmode="numeric">
+    <div class="error-msg" id="codeError" style="min-height:20px;"></div>
+    <div class="modal-buttons">
+      <button class="btn btn-primary" onclick="verifyCode()">تأكيد</button>
+      <button class="btn btn-secondary" onclick="closeCodeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="nameModal">
+  <div class="modal-box">
+    <h3>📝 بيانات المتدرب</h3>
+    <p>أدخل اسمك الثلاثي كما تريده أن يظهر في الشهادة</p>
+    <input type="text" id="traineeName" placeholder="الاسم الثلاثي" maxlength="60">
+    <div class="error-msg" id="nameError" style="min-height:20px;"></div>
+    <div class="modal-buttons">
+      <button class="btn btn-primary" onclick="confirmName()">متابعة</button>
+      <button class="btn btn-secondary" onclick="closeNameModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div id="certificateArea">
+  <div class="certificate-frame" id="printCert">
+    <div class="cert-ref" id="certRef">REF: MS-ICDL-2026-OFFICIAL</div>
+    
+    <!-- Microsoft Office Header Branding -->
+    <div class="cert-ms-header">
+      <div class="ms-logo-grid">
+        <div></div><div></div><div></div><div></div>
+      </div>
+      <div class="ms-title-brand">Microsoft Office</div>
+    </div>
+
+    <div class="cert-ornament">🎖️</div>
+    <h1>شهادة كفاءة واجتياز احترافية</h1>
+    <div class="cert-institute">Microsoft Office Certified International Program</div>
+    <div class="cert-subtitle">بالتعاون مع معهد M.A للتدريب المهني والأكاديمي</div>
+    <div class="cert-name-line">تشهد الهيئة الاختيارية للتدريب والتأهيل بأن المتدرب/ـة:</div>
+    <div class="cert-name" id="certName">—</div>
+    <div class="cert-body">
+      قد أتم(ت) بنجاح متطلبات اختبار القيادة الدولية للحاسوب <strong>(ICDL)</strong> الحكومي المتقدم<br>
+      وأظهر(ت) كفاءة عالية في التعامل مع برامج حزمة <strong>Microsoft Office</strong> والتطبيقات المتقدمة.<br>
+      <span class="cert-exam" id="certExamTitle">—</span>
+    </div>
+    <div class="cert-grade" id="certGrade">درجة الكفاءة: ممتاز</div>
+    <div class="cert-body" style="font-size:14px;color:#555;margin-top:10px;">
+      وفقاً لمعايير التقييم الدولية المعتمدة لمجلس القيادة الدولية للحاسوب<br>
+      (الدرجة النهائية المستحقة: <strong id="certScore" style="color:#1a3a5c;">—</strong> من 100)
+    </div>
+    <div class="cert-footer">
+      <div>📅 تاريخ الإصدار: <span id="certDate">—</span></div>
+      <div>🔢 الرقم المرجعي: <span id="certSerial">—</span></div>
+    </div>
+    <div class="cert-seal">
+      <div class="seal-text">
+        MICROSOFT OFFICE<br>
+        ★ CERTIFIED ★<br>
+        اعتماد رسمـي
+      </div>
+    </div>
+  </div>
+  <div class="result-actions no-print">
+    <button class="btn btn-gold" onclick="printCertificate()">🖨️ طباعة الشهادة</button>
+    <button class="btn btn-secondary" onclick="hideCertificate()">إغلاق</button>
+  </div>
+</div>
+
+<div id="answerKeyArea">
+  <div id="printKey">
+    <div class="answer-key-header">
+      <h1>📋 سلم التصحيح الرسمي</h1>
+      <div class="ak-sub">معهد M.A للتدريب المهني — منصة الاختبارات المؤتمتة</div>
+      <div class="ak-sub" style="margin-top:8px;" id="akExamTitle"></div>
+    </div>
+    <div id="akTableContainer"></div>
+    <div style="text-align:center;padding:20px;color:#666;font-size:12px;border-top:2px dashed #ddd;margin-top:20px;">
+      <p>📅 تاريخ الإصدار: <span id="akDate"></span> | 🔢 الرقم المرجعي: <span id="akRef"></span></p>
+      <p style="margin-top:8px;">هذا المستند سلم تصحيح رسمي معتمد للاستخدام المهني فقط</p>
+    </div>
+  </div>
+  <div class="result-actions no-print">
+    <button class="btn btn-primary" onclick="printAnswerKey()">🖨️ طباعة سلم التصحيح</button>
+    <button class="btn btn-secondary" onclick="hideAnswerKey()">إغلاق</button>
+  </div>
+</div>
+
+<div id="printArea" style="display:none;"></div>
+
+<script>
+/* ============================================================
+   M.A للتدريب المهني — إعداد وتصميم: أ. مصطفى اكر
+   اختبار ICDL الحكومي — 100 سؤال عشوائي من بنك 200 سؤال
+   ============================================================ */
+
+const PASSWORD = "20262026";
+const SECRET_CODE = "1987";
+const PASS_SCORE = 75;
+const MIN_PER_QUESTION = 0.9;
+const QUESTIONS_PER_EXAM = 100;
+
+let currentExam = null;
+let currentQuestions = [];
+let userAnswers = [];
+let timerInterval = null;
+let timeLeft = 0;
+let lastResult = null;
+let pendingService = null;
+let traineeNameValue = "";
+let examSeed = 0;
+
+/* ============================================================
+   بنك الأسئلة الكامل (200 سؤال)
+   ============================================================ */
+const fullQuestionBank = [
+  // ===== مفاهيم أساسية في الحاسوب (25) =====
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يصف العلاقة بين المعالج والذاكرة الرئيسية؟", o: ["المعالج يخزن البيانات بشكل دائم في الذاكرة الرئيسية", "المعالج يستدعي البيانات من الذاكرة الرئيسية وينفذ العمليات ثم يعيدها", "الذاكرة الرئيسية تنفذ العمليات نيابة عن المعالج"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما الفرق الجوهري بين الذاكرة المتطايرة والذاكرة غير المتطايرة؟", o: ["المتطايرة أسرع من غير المتطايرة دائماً", "المتطايرة تفقد محتواها عند انقطاع التيار بينما غير المتطايرة تحتفظ به", "غير المتطايرة تُستخدم فقط في الأجهزة المحمولة"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يُعد وحدة إدخال وإخراج في آن واحد؟", o: ["لوحة المفاتيح", "شاشة اللمس", "الطابعة"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما وظيفة الذاكرة المخبئية (Cache Memory)؟", o: ["تخزين البيانات بشكل دائم", "تسريع الوصول إلى البيانات المتكررة الاستخدام", "زيادة سعة التخزين الكلية"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يُعد مثالاً على البرمجيات مفتوحة المصدر؟", o: ["Windows 11", "Linux", "Microsoft Office"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما المقصود بـ 'بت' في الحاسوب؟", o: ["أصغر وحدة تخزين وتمثل 0 أو 1", "وحدة قياس سرعة المعالج", "وحدة قياس سعة الشاشة"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يحدث أولاً عند تشغيل الحاسوب؟", o: ["تحميل نظام التشغيل", "تنفيذ برنامج POST", "فتح البرامج التطبيقية"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما وظيفة مزود الطاقة (Power Supply)؟", o: ["تنظيم درجة حرارة المعالج", "تحويل التيار المتردد إلى تيار مستمر مناسب للمكونات", "زيادة سرعة المعالج"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يعتبر وحدة تخزين صلبة (SSD)؟", o: ["قرص صلب ميكانيكي", "ذاكرة فلاش سريعة بدون أجزاء متحركة", "ذاكرة RAM"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما هو الـ Firmware؟", o: ["برنامج مثبت على ذاكرة ROM يتحكم بالعتاد", "برنامج تطبيقي عادي", "نظام تشغيل كامل"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يصف المعالج متعدد النواة؟", o: ["معالج يحتوي على عدة وحدات معالجة في شريحة واحدة", "معالج يعمل بسرعة واحدة فقط", "معالج يحتاج إلى ذاكرة خارجية للعمل"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما وظيفة بطاقة الشبكة؟", o: ["تخزين البيانات", "تمكين الاتصال بالشبكات", "معالجة الصور"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما الفرق بين 32-bit و 64-bit في أنظمة التشغيل؟", o: ["64-bit يدعم ذاكرة أكبر ويؤدي أداءً أفضل", "32-bit أسرع من 64-bit دائماً", "لا يوجد فرق بينهما"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما وظيفة الـ Driver؟", o: ["برنامج وسيط بين نظام التشغيل والعتاد", "برنامج مضاد للفيروسات", "برنامج لتصفح الإنترنت"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يعتبر وحدة قياس سرعة نقل البيانات؟", o: ["جيجاهرتز", "ميجابت في الثانية", "جيجابايت"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما المقصود بـ Plug and Play؟", o: ["خاصية تتيح التعرف على الأجهزة تلقائياً عند توصيلها", "برنامج لتشغيل الألعاب", "نظام تشغيل قديم"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يُعد من مكونات اللوحة الأم؟", o: ["المعالج والذاكرة ومنافذ التوسعة", "الشاشة والطابعة", "لوحة المفاتيح والماوس"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما وظيفة الـ GPU؟", o: ["معالجة الرسوميات والصور", "تخزين الملفات", "إدارة الشبكة"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يصف الـ Cloud Computing؟", o: ["تخزين ومعالجة البيانات عبر الإنترنت", "تخزين البيانات على القرص الصلب فقط", "برنامج لتصميم المواقع"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما هو الـ Virtual Machine؟", o: ["جهاز فعلي إضافي", "برنامج يحاكي جهازاً حاسوبياً كاملاً", "نوع من الطابعات"], a: 1 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يُعد خطراً أمنياً عند توصيل USB مجهول؟", o: ["قد يحتوي على برامج ضارة", "يزيد سرعة الحاسوب", "يحسن أداء النظام"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما وظيفة جدار الحماية (Firewall)؟", o: ["منع الوصول غير المصرح به للشبكة", "زيادة سرعة الإنترنت", "تخزين البيانات"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يُعد من أنواع الشبكات حسب النطاق الجغرافي؟", o: ["LAN و WAN و MAN", "RAM و ROM", "HDD و SSD"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "ما المقصود بـ IP Address؟", o: ["عنوان فريد للجهاز على الشبكة", "اسم المستخدم", "كلمة المرور"], a: 0 },
+  { s: "مفاهيم أساسية في الحاسوب", q: "أي مما يلي يُعد ميزة للبرمجيات السحابية؟", o: ["الوصول للبيانات من أي مكان", "عدم الحاجة للإنترنت", "الأمان المطلق"], a: 0 },
+
+  // ===== Windows (20) =====
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Task Manager في Windows؟", o: ["إدارة الملفات والمجلدات", "مراقبة البرامج والعمليات وإغلاق غير المستجيب منها", "تثبيت البرامج"], a: 1 },
+  { s: "نظام التشغيل Windows", q: "كيف يمكن الوصول إلى موجه الأوامر (CMD)؟", o: ["بالضغط على Ctrl + Alt + Delete", "بالبحث عن cmd في قائمة ابدأ أو التشغيل", "من لوحة التحكم فقط"], a: 1 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Disk Defragmentation؟", o: ["حذف الملفات غير الضرورية", "إعادة ترتيب البيانات على القرص لتحسين الأداء", "زيادة سعة القرص الصلب"], a: 1 },
+  { s: "نظام التشغيل Windows", q: "أي مما يلي يُعد اختصاراً لإغلاق النافذة الحالية؟", o: ["Alt + F4", "Ctrl + F4", "Shift + F4"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Device Manager؟", o: ["إدارة الأجهزة والتحكم بالتعريفات", "إدارة الملفات", "إدارة الشبكة"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "كيف يمكن إنشاء نقطة استعادة للنظام؟", o: ["من لوحة التحكم > النظام > حماية النظام", "من مدير المهام", "من مستكشف الملفات"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Safe Mode؟", o: ["تشغيل النظام بالحد الأدنى من الخدمات لتشخيص المشاكل", "تشغيل النظام بأقصى أداء", "تشغيل النظام بدون إنترنت"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "أي مما يلي يُعد اختصاراً لفتح مستكشف الملفات؟", o: ["Win + E", "Win + R", "Win + D"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Disk Cleanup؟", o: ["حذف الملفات المؤقتة وغير الضرورية لتحرير مساحة", "تنسيق القرص الصلب", "نسخ الملفات احتياطياً"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "كيف يمكن تغيير دقة الشاشة؟", o: ["الضغط بالزر الأيمن على سطح المكتب > إعدادات العرض", "من مدير المهام", "من موجه الأوامر"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Control Panel؟", o: ["إدارة إعدادات النظام والأجهزة", "تشغيل البرامج", "تصفح الإنترنت"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "أي مما يلي يُعد اختصاراً لقفل الشاشة؟", o: ["Win + L", "Win + E", "Win + R"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة System Restore؟", o: ["استعادة النظام إلى نقطة زمنية سابقة", "حذف جميع الملفات", "تثبيت نظام جديد"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "كيف يمكن معرفة مواصفات الجهاز؟", o: ["من لوحة التحكم > النظام", "من مدير المهام", "من مستكشف الملفات"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة File History؟", o: ["نسخ الملفات احتياطياً بشكل دوري", "حذف الملفات القديمة", "ضغط الملفات"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "أي مما يلي يُعد اختصاراً لتشغيل نافذة Run؟", o: ["Win + R", "Win + E", "Win + L"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة Resource Monitor؟", o: ["مراقبة استخدام موارد النظام بشكل تفصيلي", "حذف الملفات المؤقتة", "تثبيت البرامج"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "كيف يمكن إخفاء ملف أو مجلد؟", o: ["الضغط بالزر الأيمن > خصائص > إخفاء", "Delete", "Ctrl + C"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "ما وظيفة BitLocker؟", o: ["تشفير القرص الصلب لحماية البيانات", "ضغط الملفات", "نسخ الملفات"], a: 0 },
+  { s: "نظام التشغيل Windows", q: "أي مما يلي يُعد اختصاراً لفتح الإعدادات؟", o: ["Win + I", "Win + E", "Win + R"], a: 0 },
+
+  // ===== Word (20) =====
+  { s: "معالجة النصوص Word", q: "ما وظيفة نمط الفقرات (Paragraph Style) في Word؟", o: ["تنسيق النص فقط", "تطبيق مجموعة تنسيقات متكاملة على الفقرات بشكل متسق", "تغيير لون الخلفية"], a: 1 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن إنشاء فهرس تلقائي في Word؟", o: ["بإضافة عناوين منسقة ثم إدراج > فهرس", "بكتابة الفهرس يدوياً", "باستخدام الجداول"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة Section Break في Word؟", o: ["تقسيم المستند إلى أقسام بتنسيقات مختلفة", "حذف الصفحات", "إدراج صورة"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن تتبع التغييرات في Word؟", o: ["مراجعة > تتبع التغييرات", "إدراج > تعليق", "عرض > تكبير"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة دمج المراسلات (Mail Merge)؟", o: ["إرسال رسائل متعددة مخصصة باستخدام قائمة بيانات", "دمج الصور", "دمج الجداول"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن إدراج معادلة رياضية في Word؟", o: ["إدراج > معادلة", "الصفحة الرئيسية > خط", "مراجع > فهرس"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة العلامة المائية (Watermark)؟", o: ["إضافة نص شفاف في خلفية الصفحة", "إضافة صورة", "تغيير لون النص"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن حماية مستند Word بكلمة مرور؟", o: ["ملف > معلومات > حماية المستند > تشفير بكلمة مرور", "مراجعة > حماية", "عرض > حماية"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة القوالب (Templates) في Word؟", o: ["مستندات جاهزة بتنسيقات محددة لإعادة الاستخدام", "برامج إضافية", "خطوط جديدة"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن إنشاء جدول محتويات؟", o: ["مراجع > جدول المحتويات", "إدراج > جدول", "عرض > محتويات"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة الحواشي السفلية (Footnotes)؟", o: ["إضافة ملاحظات في أسفل الصفحة", "إضافة صور", "إضافة جداول"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن تغيير اتجاه الصفحة لصفحة واحدة فقط؟", o: ["بإدراج فاصل مقطع ثم تغيير الاتجاه", "بتغيير الاتجاه لكل المستند", "لا يمكن ذلك"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة التعليقات (Comments) في Word؟", o: ["إضافة ملاحظات للمراجعة دون تعديل النص", "حذف النص", "تلوين النص"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن إنشاء قائمة متعددة المستويات؟", o: ["الصفحة الرئيسية > قائمة متعددة المستويات", "إدراج > قائمة", "عرض > قائمة"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة الكتابة فوق النص (Overtype Mode)؟", o: ["استبدال النص الموجود عند الكتابة", "إضافة نص جديد", "حذف النص"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن إدراج رأس وتذييل مختلف للصفحات الفردية والزوجية؟", o: ["تخطيط > خيارات مختلفة للصفحات الفردية والزوجية", "إدراج > رأس", "عرض > تذييل"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة المدقق اللغوي؟", o: ["التحقق من القواعد النحوية والإملائية", "ترجمة النص", "تنسيق النص"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن إنشاء ارتباط تشعبي في Word؟", o: ["إدراج > ارتباط تشعبي", "الصفحة الرئيسية > خط", "مراجع > فهرس"], a: 0 },
+  { s: "معالجة النصوص Word", q: "ما وظيفة وضع القراءة (Read Mode)؟", o: ["عرض المستند بشكل ملائم للقراءة دون تعديل", "طباعة المستند", "حفظ المستند"], a: 0 },
+  { s: "معالجة النصوص Word", q: "كيف يمكن مقارنة مستندين في Word؟", o: ["مراجعة > مقارنة", "عرض > مقارنة", "إدراج > مقارنة"], a: 0 },
+
+  // ===== Excel أساسيات (20) =====
+  { s: "Excel - أساسيات متقدمة", q: "ما الفرق بين الصيغة (Formula) والدالة (Function) في Excel؟", o: ["الصيغة يكتبها المستخدم بنفسه والدالة جاهزة", "لا فرق بينهما", "الدالة يكتبها المستخدم والصيغة جاهزة"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة علامة $ في مراجع الخلايا؟", o: ["تثبيت المرجع (صف أو عمود أو كليهما)", "إضافة قيمة", "حذف المرجع"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما الفرق بين المرجع النسبي والمطلق؟", o: ["النسبي يتغير عند النسخ والمطلق يبقى ثابتاً", "المطلق يتغير والنسبي ثابت", "لا فرق بينهما"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة الاسم المعرّف (Named Range)؟", o: ["إعطاء اسم لنطاق خلايا لتسهيل استخدامه في الصيغ", "تلوين الخلايا", "حذف الخلايا"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن إخفاء صف في Excel؟", o: ["الضغط بالزر الأيمن على رقم الصف > إخفاء", "Delete", "Ctrl + H"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة التجميد (Freeze Panes)؟", o: ["تثبيت صفوف أو أعمدة أثناء التمرير", "تجميد قيم الخلايا", "قفل الملف"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن إضافة تعليق لخلية؟", o: ["مراجعة > تعليق جديد", "إدراج > صورة", "عرض > تعليق"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة التحقق من الصحة (Data Validation)؟", o: ["تقييد إدخال البيانات وفق شروط محددة", "حذف البيانات", "نسخ البيانات"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن إنشاء قائمة منسدلة في خلية؟", o: ["بيانات > التحقق من الصحة > قائمة", "إدراج > قائمة", "عرض > قائمة"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة التنسيق الشرطي (Conditional Formatting)؟", o: ["تنسيق الخلايا بناءً على قيمها", "تنسيق عادي", "حذف التنسيق"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن إبراز الخلايا التي تحتوي على قيم أكبر من 100؟", o: ["الصفحة الرئيسية > تنسيق شرطي > قاعدة جديدة", "إدراج > صورة", "مراجع > فهرس"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة الجدول (Table) في Excel؟", o: ["تنظيم البيانات وتسهيل الفرز والتصفية", "رسم بياني", "صورة"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن تحويل نطاق إلى جدول؟", o: ["إدراج > جدول", "الصفحة الرئيسية > جدول", "بيانات > جدول"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة الصف الإجمالي (Total Row) في الجدول؟", o: ["إضافة صف تلقائي للعمليات الحسابية", "حذف الصفوف", "نسخ الصفوف"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن إزالة التكرار من البيانات؟", o: ["بيانات > إزالة التكرار", "الصفحة الرئيسية > حذف", "إدراج > حذف"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة النص إلى أعمدة (Text to Columns)؟", o: ["تقسيم النص في خلية إلى عدة خلايا", "دمج النصوص", "حذف النصوص"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن دمج النصوص من عدة خلايا؟", o: ["استخدام & أو دالة CONCATENATE", "استخدام SUM", "استخدام AVERAGE"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة الدالة TEXT؟", o: ["تحويل الأرقام إلى نص بتنسيق محدد", "جمع النصوص", "حذف النصوص"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "كيف يمكن تحويل النص إلى رقم؟", o: ["استخدام VALUE أو الضرب في 1", "استخدام TEXT", "استخدام CONCATENATE"], a: 0 },
+  { s: "Excel - أساسيات متقدمة", q: "ما وظيفة الدالة TRIM؟", o: ["إزالة المسافات الزائدة من النص", "إضافة مسافات", "حذف النص"], a: 0 },
+
+  // ===== Excel دوال متقدمة (30) =====
+  { s: "Excel - دوال متقدمة", q: "ما نتيجة =SUMIF(A1:A10,\">5\",B1:B10)؟", o: ["جمع قيم B حيث A أكبر من 5", "جمع قيم A أكبر من 5", "عد الخلايا"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما نتيجة =COUNTIF(A1:A10,\">5\")؟", o: ["عد الخلايا التي قيمتها أكبر من 5", "جمع القيم", "المتوسط"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة SUMIFS؟", o: ["الجمع وفق شروط متعددة", "الجمع بشرط واحد", "العد"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة COUNTIFS؟", o: ["العد وفق شروط متعددة", "العد بشرط واحد", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة AVERAGEIFS؟", o: ["المتوسط وفق شروط متعددة", "المتوسط العادي", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما الفرق بين VLOOKUP و HLOOKUP؟", o: ["VLOOKUP يبحث عمودياً و HLOOKUP أفقياً", "كلاهما يبحث عمودياً", "VLOOKUP أسرع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الوسيط الرابع (Range_lookup) في VLOOKUP؟", o: ["تحديد البحث التقريبي أو الدقيق", "تحديد العمود", "تحديد الصف"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة INDEX؟", o: ["إرجاع قيمة من موقع محدد في نطاق", "البحث عن قيمة", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة MATCH؟", o: ["إرجاع موقع قيمة في نطاق", "إرجاع القيمة نفسها", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما فائدة دمج INDEX مع MATCH؟", o: ["بحث أكثر مرونة من VLOOKUP", "جمع القيم", "عد القيم"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة OFFSET؟", o: ["إرجاع مرجع لخلية أو نطاق بإزاحة محددة", "حذف الخلايا", "نسخ الخلايا"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة INDIRECT؟", o: ["إرجاع مرجع من نص", "جمع القيم", "البحث"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة CHOOSE؟", o: ["اختيار قيمة من قائمة حسب رقم الفهرس", "الجمع", "البحث"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة IF المتداخلة؟", o: ["اختبار شروط متعددة", "جمع القيم", "عد القيم"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة IFS؟", o: ["اختبار شروط متعددة بدون تداخل", "الجمع", "البحث"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة SWITCH؟", o: ["تقييم تعبير ومطابقته مع قيم", "الجمع", "العد"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة SUMPRODUCT؟", o: ["ضرب النطاقات ثم جمع النواتج", "جمع القيم", "عد القيم"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة دالة SUMPRODUCT مع الشرط؟", o: ["جمع مع ضرب وفق شروط", "جمع عادي", "عد"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة ROUNDUP؟", o: ["تقريب لأعلى", "تقريب لأسفل", "تقريب عادي"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة ROUNDDOWN؟", o: ["تقريب لأسفل", "تقريب لأعلى", "تقريب عادي"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة MROUND؟", o: ["تقريب لأقرب مضاعف", "تقريب عادي", "تقريب لأعلى"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة CEILING؟", o: ["تقريب لأقرب مضاعف لأعلى", "تقريب لأسفل", "تقريب عادي"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة FLOOR؟", o: ["تقريب لأقرب مضاعف لأسفل", "تقريب لأعلى", "تقريب عادي"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة RANDBETWEEN؟", o: ["إرجاع رقم عشوائي بين حدين", "إرجاع رقم ثابت", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة LARGE؟", o: ["إرجاع القيمة الأكبر رقم n في نطاق", "إرجاع القيمة الأصغر", "إرجاع المتوسط"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة SMALL؟", o: ["إرجاع القيمة الأصغر رقم n في نطاق", "إرجاع القيمة الأكبر", "إرجاع المتوسط"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة RANK؟", o: ["إرجاع ترتيب قيمة في قائمة", "إرجاع القيمة نفسها", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة PERCENTILE؟", o: ["إرجاع القيمة عند نسبة مئوية محددة", "إرجاع النسبة المئوية", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة QUARTILE؟", o: ["إرجاع الربع المحدد من البيانات", "إرجاع النصف", "الجمع"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة STDEV؟", o: ["حساب الانحراف المعياري", "حساب المتوسط", "حساب الوسيط"], a: 0 },
+  { s: "Excel - دوال متقدمة", q: "ما وظيفة الدالة VAR؟", o: ["حساب التباين", "حساب المتوسط", "حساب الوسيط"], a: 0 },
+
+  // ===== Excel تحليل البيانات (20) =====
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة الجدول المحوري (PivotTable)؟", o: ["تلخيص وتحليل البيانات الكبيرة بسرعة", "رسم المخططات", "تنسيق الخلايا"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما مكونات الجدول المحوري الأساسية؟", o: ["الصفوف والأعمدة والقيم وعوامل التصفية", "الخلايا والصفوف", "الأعمدة فقط"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "كيف يمكن تحديث جدول محوري؟", o: ["الضغط بالزر الأيمن > تحديث", "Delete", "Ctrl + C"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Slicer في الجدول المحوري؟", o: ["تصفية تفاعلية للبيانات", "حذف البيانات", "نسخ البيانات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Timeline في الجدول المحوري؟", o: ["تصفية حسب الوقت", "تصفية حسب القيمة", "تصفية حسب النص"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما الفرق بين المخطط العمودي والمخطط الشريطي؟", o: ["العمودي رأسي والشريطي أفقي", "لا فرق بينهما", "الشريطي أسرع"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة المخطط الدائري؟", o: ["إظهار النسب من الإجمالي", "إظهار الاتجاهات", "إظهار المقارنات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة المخطط الخطي؟", o: ["إظهار الاتجاهات عبر الزمن", "إظهار النسب", "إظهار المقارنات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة المخطط المبعثر؟", o: ["إظهار العلاقة بين متغيرين", "إظهار النسب", "إظهار الاتجاهات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "كيف يمكن إضافة خط اتجاه في المخطط؟", o: ["الضغط بالزر الأيمن على البيانات > إضافة خط اتجاه", "إدراج > خط", "عرض > خط"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Sparklines؟", o: ["مخططات صغيرة داخل خلية", "مخططات كبيرة", "جداول"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة المخطط المدمج (Combo Chart)؟", o: ["دمج نوعين من المخططات", "مخطط واحد", "جدول"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "كيف يمكن تغيير مصدر بيانات المخطط؟", o: ["الضغط بالزر الأيمن > تحديد البيانات", "Delete", "Ctrl + C"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة المحور الثانوي في المخطط؟", o: ["إظهار بيانات بمقاييس مختلفة", "إظهار نفس البيانات", "حذف البيانات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "كيف يمكن تنسيق المخطط؟", o: ["تصميم > تنسيق", "إدراج > تنسيق", "عرض > تنسيق"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Analysis ToolPak؟", o: ["إضافة أدوات تحليل إحصائي متقدمة", "تحليل النصوص", "تحليل الصور"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Goal Seek؟", o: ["إيجاد القيمة المطلوبة لتحقيق نتيجة محددة", "البحث عن خلية", "فرز البيانات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Solver؟", o: ["حل مشاكل التحسين بقيود متعددة", "حل المعادلات البسيطة", "فرز البيانات"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Scenario Manager؟", o: ["إدارة سيناريوهات متعددة للبيانات", "إدارة الملفات", "إدارة الصور"], a: 0 },
+  { s: "Excel - تحليل البيانات", q: "ما وظيفة Data Table؟", o: ["إظهار نتائج تغيير متغير أو متغيرين", "إظهار البيانات الأصلية", "حذف البيانات"], a: 0 },
+
+  // ===== Excel استنتاجي (15) =====
+  { s: "Excel - أسئلة استنتاجية", q: "إذا كانت A1=10 و A2=20 و A3=30، فما نتيجة =SUM(A1:A3)/COUNT(A1:A3)؟", o: ["20", "30", "60"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "إذا كانت A1=5 و B1=10، فما نتيجة =IF(AND(A1>3,B1>15),\"نعم\",\"لا\")؟", o: ["نعم", "لا", "خطأ"], a: 1 },
+  { s: "Excel - أسئلة استنتاجية", q: "إذا كانت A1=\"Excel\"، فما نتيجة =LEN(A1)*2؟", o: ["10", "12", "14"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =ROUND(15.678,1)؟", o: ["15.7", "15.6", "16"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =INT(15.9)؟", o: ["15", "16", "15.9"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =MOD(10,3)؟", o: ["1", "3", "3.33"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =POWER(2,3)؟", o: ["8", "6", "9"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =SQRT(16)؟", o: ["4", "8", "256"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =ABS(-5)؟", o: ["5", "-5", "0"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "إذا كانت A1=10 و A2=20، فما نتيجة =A1&\" و \"&A2؟", o: ["10 و 20", "30", "خطأ"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =LEFT(\"مرحبا بك\",3)؟", o: ["مرح", "با", "بك"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =RIGHT(\"Excel 2024\",4)؟", o: ["2024", "Excel", "202"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =MID(\"Syria\",2,3)؟", o: ["yri", "Syr", "ria"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "إذا كانت A1=تاريخ اليوم، فما نتيجة =YEAR(A1)؟", o: ["السنة الحالية", "الشهر الحالي", "اليوم الحالي"], a: 0 },
+  { s: "Excel - أسئلة استنتاجية", q: "ما نتيجة =IFERROR(1/0,\"خطأ\")؟", o: ["خطأ", "0", "1"], a: 0 },
+
+  // ===== PowerPoint (20) =====
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Slide Master؟", o: ["التحكم بتنسيق جميع الشرائح بشكل موحد", "إضافة شريحة جديدة", "حذف الشرائح"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة الحركات (Animations)؟", o: ["إضافة تأثيرات للكائنات داخل الشريحة", "الانتقال بين الشرائح", "تغيير التصميم"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما الفرق بين Transition و Animation؟", o: ["Transition بين الشرائح و Animation للكائنات", "لا فرق بينهما", "Animation بين الشرائح"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن إضافة ملاحظات المتحدث؟", o: ["عرض > ملاحظات", "إدراج > ملاحظة", "تصميم > ملاحظة"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Rehearse Timings؟", o: ["تسجيل توقيت العرض", "تسجيل الصوت", "تسجيل الفيديو"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن تصدير العرض كفيديو؟", o: ["ملف > تصدير > إنشاء فيديو", "ملف > حفظ", "عرض > فيديو"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Custom Show؟", o: ["إنشاء عرض مخصص بشرائح محددة", "إنشاء عرض جديد", "حذف العرض"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن إدراج مخطط بياني في PowerPoint؟", o: ["إدراج > مخطط", "تصميم > مخطط", "عرض > مخطط"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Action Buttons؟", o: ["إضافة أزرار تفاعلية للتنقل", "إضافة صور", "إضافة نصوص"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن حماية العرض بكلمة مرور؟", o: ["ملف > معلومات > حماية العرض", "مراجعة > حماية", "عرض > حماية"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Morph Transition؟", o: ["انتقال سلس بين الشرائح المتشابهة", "انتقال عادي", "حذف الشريحة"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن تغيير حجم الشريحة؟", o: ["تصميم > حجم الشريحة", "إدراج > حجم", "عرض > حجم"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Presenter View؟", o: ["عرض خاص للمتحدث مع ملاحظات", "عرض عادي", "عرض للجمهور"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن إدراج شعار في جميع الشرائح؟", o: ["من Slide Master", "من إدراج > صورة", "من تصميم > شعار"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Trigger في الحركات؟", o: ["تشغيل حركة عند النقر على كائن معين", "تشغيل الحركة تلقائياً", "إيقاف الحركة"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن إنشاء ارتباط تشعبي في PowerPoint؟", o: ["إدراج > ارتباط تشعبي", "تصميم > ارتباط", "عرض > ارتباط"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Slide Sorter؟", o: ["عرض جميع الشرائح بشكل مصغر", "عرض شريحة واحدة", "عرض الملاحظات"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن إضافة تعليق في PowerPoint؟", o: ["مراجعة > تعليق جديد", "إدراج > تعليق", "عرض > تعليق"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "ما وظيفة Zoom في PowerPoint؟", o: ["التكبير على جزء محدد من الشريحة", "تصغير الشريحة", "تكبير الشريحة"], a: 0 },
+  { s: "العروض التقديمية PowerPoint", q: "كيف يمكن طباعة الشرائح مع الملاحظات؟", o: ["ملف > طباعة > ملاحظات الصفحات", "ملف > طباعة > شرائح", "ملف > طباعة > مخطط تفصيلي"], a: 0 },
+
+  // ===== Access (15) =====
+  { s: "قواعد البيانات Access", q: "ما الفرق بين الجدول واستعلام في Access؟", o: ["الجدول يخزن البيانات والاستعلام يجلبها وفق شروط", "لا فرق بينهما", "الاستعلام يخزن البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة المفتاح الأساسي المركب؟", o: ["يتكون من أكثر من حقل لتمييز السجلات", "يتكون من حقل واحد", "لا يوجد"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة العلاقة One-to-Many؟", o: ["سجل واحد يرتبط بعدة سجلات في جدول آخر", "سجل واحد يرتبط بسجل واحد", "عدة سجلات ترتبط بعدة سجلات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة العلاقة Many-to-Many؟", o: ["تحتاج جدول وسيط", "لا تحتاج جدول وسيط", "لا توجد"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة الاستعلام المعلمي (Parameter Query)؟", o: ["يطلب إدخال قيمة عند التشغيل", "يعرض كل البيانات", "يحذف البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة استعلام التحديث (Update Query)؟", o: ["تحديث بيانات في الجدول", "عرض البيانات", "حذف البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة استعلام الحذف (Delete Query)؟", o: ["حذف سجلات وفق شرط", "عرض البيانات", "تحديث البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة استعلام الإلحاق (Append Query)؟", o: ["إضافة سجلات لجدول", "حذف السجلات", "عرض السجلات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة النموذج (Form) في Access؟", o: ["واجهة لإدخال البيانات بشكل مريح", "تخزين البيانات", "تحليل البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة التقرير (Report) في Access؟", o: ["عرض البيانات بشكل منسق للطباعة", "إدخال البيانات", "تخزين البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة الماكرو في Access؟", o: ["أتمتة المهام المتكررة", "تخزين البيانات", "عرض البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة الوحدة النمطية (Module)؟", o: ["كتابة أكواد VBA", "إدخال البيانات", "عرض البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "كيف يمكن استيراد بيانات من Excel إلى Access؟", o: ["بيانات خارجية > استيراد", "ملف > استيراد", "إنشاء > استيراد"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة التجميع (Grouping) في التقارير؟", o: ["تجميع البيانات حسب حقل معين", "حذف البيانات", "نسخ البيانات"], a: 0 },
+  { s: "قواعد البيانات Access", q: "ما وظيفة التصفية (Filter) في Access؟", o: ["عرض سجلات وفق شرط", "حذف السجلات", "نسخ السجلات"], a: 0 },
+
+  // ===== الإنترنت (15) =====
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما الفرق بين HTTP و HTTPS؟", o: ["HTTPS مشفر وآمن", "HTTP أسرع", "لا فرق بينهما"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة DNS؟", o: ["تحويل أسماء النطاقات إلى عناوين IP", "تشفير البيانات", "ضغط الملفات"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة VPN؟", o: ["إنشاء اتصال مشفر وآمن", "زيادة سرعة الإنترنت", "تخزين البيانات"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما الفرق بين POP3 و IMAP؟", o: ["POP3 يحمّل الرسائل و IMAP يزامنها", "لا فرق بينهما", "POP3 أحدث"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة SMTP؟", o: ["إرسال البريد الإلكتروني", "استقبال البريد", "تخزين البريد"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة التوقيع الرقمي؟", o: ["التحقق من صحة المرسل وسلامة الرسالة", "توقيع الرسالة يدوياً", "تشفير الرسالة"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة الشهادة الرقمية (SSL Certificate)؟", o: ["تأكيد هوية الموقع وتشفير الاتصال", "زيادة سرعة الموقع", "تخزين البيانات"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة الكوكيز (Cookies)؟", o: ["تخزين معلومات المستخدم في المتصفح", "حذف الملفات", "تسريع الإنترنت"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما الفرق بين المتصفح ومحرك البحث؟", o: ["المتصفح برنامج والمحرك موقع", "لا فرق بينهما", "المحرك برنامج"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة البريد العشوائي (Spam)؟", o: ["رسائل غير مرغوب فيها", "رسائل مهمة", "رسائل مشفرة"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة التصيد الاحتيالي (Phishing)؟", o: ["محاولة سرقة المعلومات عن طريق رسائل مزيفة", "برنامج مفيد", "نظام تشغيل"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة برنامج مكافحة الفيروسات؟", o: ["كشف وإزالة البرامج الضارة", "تسريع الجهاز", "تخزين البيانات"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة النسخ الاحتياطي السحابي؟", o: ["تخزين البيانات على الإنترنت", "تخزين البيانات محلياً", "حذف البيانات"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة المصادقة الثنائية (2FA)؟", o: ["طبقة أمان إضافية تتطلب وسيلتين للتحقق", "كلمة مرور قوية", "برنامج مضاد للفيروسات"], a: 0 },
+  { s: "الإنترنت والبريد الإلكتروني", q: "ما وظيفة VPN في المسابقات الحكومية؟", o: ["حماية البيانات أثناء الاتصال بالشبكات العامة", "زيادة سرعة الإنترنت", "تخزين الملفات"], a: 0 }
+];
+
+/* ============================================================
+   دوال العشوائية وتوزيع الإجابات
+   ============================================================ */
+function seededRandom(seed) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return function() {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function shuffleArray(arr, rng) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function randomizeQuestionOptions(question, rng) {
+  const indices = [0, 1, 2];
+  const shuffledIndices = shuffleArray(indices, rng);
+  const newOptions = shuffledIndices.map(i => question.o[i]);
+  const newAnswer = shuffledIndices.indexOf(question.a);
+  return {
+    s: question.s,
+    q: question.q,
+    o: newOptions,
+    a: newAnswer
+  };
+}
+
+function generateExam() {
+  examSeed = Math.floor(Math.random() * 900000) + 100000;
+  const rng = seededRandom(examSeed);
+  const shuffledBank = shuffleArray(fullQuestionBank, rng);
+  const selected = shuffledBank.slice(0, QUESTIONS_PER_EXAM);
+  return selected.map(q => randomizeQuestionOptions(q, rng));
+}
+
+function getExamStats() {
+  return { total: QUESTIONS_PER_EXAM, duration: Math.round(QUESTIONS_PER_EXAM * MIN_PER_QUESTION) };
+}
+
+function generateSerial() {
+  const d = new Date();
+  const rand = Math.floor(Math.random() * 9000) + 1000;
+  return `MS-ICDL-${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}-${rand}`;
+}
+
+function formatDate(d) {
+  return d.toLocaleDateString('ar-SY', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+/* ============================================================
+   عرض بطاقة الاختبار
+   ============================================================ */
+function renderExamCards() {
+  const grid = document.getElementById('examsGrid');
+  const stats = getExamStats();
+  grid.innerHTML = `
+    <div class="exam-card" onclick="startExam()">
+      <div class="icon">💻</div>
+      <h3>اختبار ICDL الحكومي المتقدم — المسابقات الحكومية</h3>
+      <div class="meta">
+        <span>${stats.total} سؤالاً (عشوائي من 200)</span>
+        <span>100 درجة</span>
+        <span>${stats.duration} دقيقة</span>
+        <span>النجاح 75+</span>
+        <span>توزيع عشوائي للإجابات</span>
+      </div>
+      <button class="start-btn">ابدأ الاختبار</button>
+      <div class="card-credit">إعداد وتصميم: أ. مصطفى اكر</div>
+    </div>`;
+}
+
+/* ============================================================
+   تسجيل الدخول
+   ============================================================ */
+function checkPassword() {
+  const input = document.getElementById('passwordInput').value;
+  const err = document.getElementById('errorMsg');
+  if (input === PASSWORD) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainHeader').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('mainFooter').style.display = 'block';
+    renderExamCards();
+    err.textContent = '';
+  } else {
+    err.textContent = '❌ كلمة المرور غير صحيحة. حاول مرة أخرى.';
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
+  }
+}
+document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') checkPassword();
+});
+
+/* ============================================================
+   التنقل
+   ============================================================ */
+function goHome() {
+  if (timerInterval) clearInterval(timerInterval);
+  document.getElementById('homeScreen').style.display = 'block';
+  document.getElementById('examScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('certificateArea').style.display = 'none';
+  document.getElementById('answerKeyArea').style.display = 'none';
+}
+
+function retryExam() { startExam(); }
+
+/* ============================================================
+   بدء الاختبار
+   ============================================================ */
+function startExam() {
+  currentExam = 'icdl';
+  currentQuestions = generateExam();
+  userAnswers = new Array(currentQuestions.length).fill(null);
+
+  const stats = getExamStats();
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('certificateArea').style.display = 'none';
+  document.getElementById('answerKeyArea').style.display = 'none';
+  document.getElementById('examScreen').style.display = 'block';
+  document.getElementById('examTitle').textContent = 'اختبار ICDL الحكومي المتقدم — 100 سؤال عشوائي';
+  document.getElementById('submitBtn').disabled = false;
+
+  timeLeft = stats.duration * 60;
+  updateTimer();
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      submitExam();
+    }
+  }, 1000);
+
+  renderQuestions();
+  renderNavGrid();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+  const box = document.getElementById('timerBox');
+  if (timeLeft < 300) box.classList.add('danger');
+  else box.classList.remove('danger');
+}
+
+function renderQuestions() {
+  const container = document.getElementById('questionsContainer');
+  container.innerHTML = '';
+  currentQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${idx}`;
+    const letters = ['أ', 'ب', 'ج'];
+    let optionsHTML = '';
+    q.o.forEach((opt, oIdx) => {
+      optionsHTML += `
+        <div class="option" onclick="selectAnswer(${idx}, ${oIdx})" id="opt-${idx}-${oIdx}">
+          <div class="opt-letter">${letters[oIdx]}</div>
+          <div class="opt-text">${opt}</div>
+        </div>`;
+    });
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;margin-bottom:15px;">
+        <div class="question-number">${idx + 1}</div>
+      </div>
+      <div class="question-text">${q.q}</div>
+      <div class="options">${optionsHTML}</div>`;
+    container.appendChild(card);
+  });
+}
+
+function renderNavGrid() {
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML = '';
+  currentQuestions.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = i + 1;
+    btn.id = `navbtn-${i}`;
+    if (userAnswers[i] !== null) btn.classList.add('answered');
+    btn.onclick = () => document.getElementById(`q-${i}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    grid.appendChild(btn);
+  });
+}
+
+function selectAnswer(qIdx, oIdx) {
+  userAnswers[qIdx] = oIdx;
+  const q = currentQuestions[qIdx];
+  q.o.forEach((_, i) => {
+    const el = document.getElementById(`opt-${qIdx}-${i}`);
+    if (el) el.classList.remove('selected');
+  });
+  const selected = document.getElementById(`opt-${qIdx}-${oIdx}`);
+  if (selected) selected.classList.add('selected');
+  const navBtn = document.getElementById(`navbtn-${qIdx}`);
+  if (navBtn) navBtn.classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const pct = (answered / currentQuestions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+/* ============================================================
+   تقديم الاختبار واستعراض النتيجة
+   ============================================================ */
+function submitExam() {
+  const unanswered = userAnswers.filter(a => a === null).length;
+  if (unanswered > 0 && timerInterval) {
+    if (!confirm(`⚠️ لديك ${unanswered} سؤال لم تُجب عليه. هل تريد إنهاء الاختبار؟`)) return;
+  }
+  if (timerInterval) clearInterval(timerInterval);
+
+  const totalQuestions = currentQuestions.length;
+  let totalCorrect = 0;
+  const sectionMap = {};
+
+  currentQuestions.forEach((q, idx) => {
+    if (!sectionMap[q.s]) sectionMap[q.s] = { name: q.s, total: 0, correct: 0 };
+    sectionMap[q.s].total++;
+    if (userAnswers[idx] === q.a) {
+      totalCorrect++;
+      sectionMap[q.s].correct++;
+    }
+  });
+
+  const totalScore = Math.round((totalCorrect / totalQuestions) * 100);
+  const passed = totalScore >= PASS_SCORE;
+  const sectionStats = Object.values(sectionMap);
+
+  lastResult = { totalScore, passed, totalCorrect, totalQuestions, sectionStats };
+
+  document.getElementById('examScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+
+  const circle = document.getElementById('resultCircle');
+  circle.className = 'result-circle ' + (passed ? 'pass' : 'fail');
+  document.getElementById('resultScore').textContent = totalScore;
+
+  const title = document.getElementById('resultTitle');
+  title.className = 'result-title ' + (passed ? 'pass' : 'fail');
+  title.textContent = passed ? '🎉 مبروك، لقد نجحت!' : '😔 للأسف، لم تجتز الاختبار';
+
+  const msg = document.getElementById('resultMessage');
+  msg.innerHTML = passed
+    ? `لقد حصلت على <strong>${totalScore}</strong> من 100 درجة. أداء ممتاز!<br>عدد الإجابات الصحيحة: ${totalCorrect} من ${totalQuestions}`
+    : `لقد حصلت على <strong>${totalScore}</strong> من 100 درجة. تحتاج إلى 75 درجة للنجاح.<br>عدد الإجابات الصحيحة: ${totalCorrect} من ${totalQuestions}<br>راجع الأسئلة الخاطئة أدناه لتحسين أدائك.`;
+
+  // إخفاء أو إظهار زر الشهادة طبقاً لشرط الحصول على 75% فأكثر
+  document.getElementById('certBtn').style.display = passed ? 'inline-block' : 'none';
+
+  const summary = document.getElementById('sectionsSummary');
+  summary.innerHTML = '';
+  sectionStats.forEach(s => {
+    const pct = s.total > 0 ? (s.correct / s.total) * 100 : 0;
+    const ps = pct >= 75;
+    const color = ps ? '#28a745' : '#dc3545';
+    summary.innerHTML += `
+      <div class="section-row">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="name">${s.name}</div>
+          <div class="score-badge ${ps ? 'pass' : 'fail'}">${s.correct} / ${s.total}</div>
+        </div>
+        <div class="section-bar"><div class="section-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+      </div>`;
+  });
+
+  const reviewContainer = document.getElementById('reviewContainer');
+  reviewContainer.innerHTML = '';
+  let wrongCount = 0;
+  
+  currentQuestions.forEach((q, idx) => {
+    if (userAnswers[idx] !== q.a) {
+      wrongCount++;
+      const userAnsText = userAnswers[idx] !== null ? q.o[userAnswers[idx]] : "لم يتم الإجابة";
+      const correctAnsText = q.o[q.a];
+      reviewContainer.innerHTML += `
+        <div class="review-item">
+          <div class="q-text">س${idx + 1}: ${q.q}</div>
+          <div class="review-answer your-wrong">
+            <span class="label">إجابتك:</span> ${userAnsText}
+          </div>
+          <div class="review-answer correct-ans">
+            <span class="label">الإجابة الصحيحة:</span> ${correctAnsText}
+          </div>
+        </div>`;
+    }
+  });
+
+  if (wrongCount === 0) {
+    reviewContainer.innerHTML = '<p style="color:var(--success);font-weight:bold;text-align:center;">تهانينا! جميع إجاباتك صحيحة 🎉</p>';
+  }
+}
+
+/* ============================================================
+   إدارة الأكواد والشهادات وسلم التصحيح
+   ============================================================ */
+function requestCertificate() {
+  if (!lastResult || lastResult.totalScore < PASS_SCORE) {
+    alert("⚠️ لا يمكن طباعة الشهادة إلا عند الحصول على درجة 75% أو أكثر.");
+    return;
+  }
+  pendingService = 'cert';
+  openCodeModal();
+}
+
+function requestAnswerKey() {
+  pendingService = 'key';
+  openCodeModal();
+}
+
+function openCodeModal() {
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeError').textContent = '';
+  document.getElementById('codeModal').classList.add('show');
+  document.getElementById('codeInput').focus();
+}
+
+function closeCodeModal() {
+  document.getElementById('codeModal').classList.remove('show');
+}
+
+function verifyCode() {
+  const code = document.getElementById('codeInput').value.trim();
+  const err = document.getElementById('codeError');
+  if (code === SECRET_CODE) {
+    closeCodeModal();
+    if (pendingService === 'cert') {
+      openNameModal();
+    } else if (pendingService === 'key') {
+      showAnswerKey();
+    }
+  } else {
+    err.textContent = '❌ الرمز السري غير صحيح!';
+  }
+}
+
+function openNameModal() {
+  document.getElementById('traineeName').value = '';
+  document.getElementById('nameError').textContent = '';
+  document.getElementById('nameModal').classList.add('show');
+  document.getElementById('traineeName').focus();
+}
+
+function closeNameModal() {
+  document.getElementById('nameModal').classList.remove('show');
+}
+
+function confirmName() {
+  const name = document.getElementById('traineeName').value.trim();
+  const err = document.getElementById('nameError');
+  if (name.length < 5) {
+    err.textContent = '⚠️ يرجى كتابة الاسم الثلاثي بشكل صحيح.';
+    return;
+  }
+  traineeNameValue = name;
+  closeNameModal();
+  showCertificate();
+}
+
+/* ============================================================
+   عرض الشهادة و سلم التصحيح
+   ============================================================ */
+function showCertificate() {
+  document.getElementById('certName').textContent = traineeNameValue;
+  document.getElementById('certExamTitle').textContent = 'اختبار ICDL الحكومي المتقدم - المهارات الرقمية وحزمة Microsoft Office';
+  document.getElementById('certScore').textContent = lastResult.totalScore;
+  document.getElementById('certDate').textContent = formatDate(new Date());
+  document.getElementById('certSerial').textContent = generateSerial();
+  document.getElementById('certGrade').textContent = `تقدير: ${lastResult.totalScore >= 90 ? 'ممتاز مرتفع' : 'ممتاز'} (${lastResult.totalScore}%)`;
+  
+  document.getElementById('certificateArea').style.display = 'block';
+  document.getElementById('certificateArea').scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideCertificate() {
+  document.getElementById('certificateArea').style.display = 'none';
+}
+
+function printCertificate() {
+  const certContent = document.getElementById('printCert').outerHTML;
+  const printArea = document.getElementById('printArea');
+  printArea.innerHTML = certContent;
+  printArea.style.display = 'block';
+  window.print();
+  printArea.style.display = 'none';
+  printArea.innerHTML = '';
+}
+
+function showAnswerKey() {
+  const container = document.getElementById('akTableContainer');
+  document.getElementById('akExamTitle').textContent = 'سُلم إجابات اختبار ICDL المتقدم';
+  document.getElementById('akDate').textContent = formatDate(new Date());
+  document.getElementById('akRef').textContent = generateSerial();
+
+  const letters = ['أ', 'ب', 'ج'];
+  let tableHTML = `
+    <table class="answer-key-table">
+      <thead>
+        <tr>
+          <th style="width:60px;text-align:center;">السؤال</th>
+          <th>موضوع السؤال</th>
+          <th>نص السؤال</th>
+          <th style="text-align:center;">الإجابة الصحيحة</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  currentQuestions.forEach((q, idx) => {
+    tableHTML += `
+      <tr>
+        <td class="q-num">${idx + 1}</td>
+        <td>${q.s}</td>
+        <td>${q.q}</td>
+        <td class="answer-cell">${letters[q.a]} - ${q.o[q.a]}</td>
+      </tr>`;
+  });
+
+  tableHTML += `</tbody></table>`;
+  container.innerHTML = tableHTML;
+
+  document.getElementById('answerKeyArea').style.display = 'block';
+  document.getElementById('answerKeyArea').scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideAnswerKey() {
+  document.getElementById('answerKeyArea').style.display = 'none';
+}
+
+function printAnswerKey() {
+  const keyContent = document.getElementById('printKey').outerHTML;
+  const printArea = document.getElementById('printArea');
+  printArea.innerHTML = keyContent;
+  printArea.style.display = 'block';
+  window.print();
+  printArea.style.display = 'none';
+  printArea.innerHTML = '';
+}
+</script>
+</body>
+</html>
